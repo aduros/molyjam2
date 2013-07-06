@@ -48,7 +48,7 @@ Widgets:
     f.) Oil Pressure
     g.) Hydrolic pressure
     h.) Radio frequency
-    i.) Temperature (causes wings to freeze?)
+    i.) Temperature (causes wings to freeze? Or instruments to be off?)
     j.) Air speed indicator
     h.) Battery faults
 3.) Buttons
@@ -59,13 +59,21 @@ Widgets:
     e.) Fire extiguishers (per engine, possibly locked - will disable an engine if both unlocked and hit).
     f.) Toilet fault?
     g.) Engine enable/disable
+    h.) Eject?
+    i.) Air brakes
+    j.) Equipment cooling
+    k.) Cabin defogger?
+    l.) Normalize hydrolic pressure (denormalize if already normalized)
+    m.) Normalize oil pressure (denormalize if already normalized)
+    n.) Landing gear
 4.) Dials
     a.) Flaps
-    b.) Temperature control (indoors and out?)
+    b.) Temperature control (indoors and out?)    
     c.) Wipers enabled - fast/slow/off, left and right.
     d.) Battery Power Source (if batteries get disabled)
     e.) Radio frequency set
     f.) Autopilot direction
+    g.) Circuit breaker
 5.) Steering (Pitch/Yaw)
 6.) Throttle
 
