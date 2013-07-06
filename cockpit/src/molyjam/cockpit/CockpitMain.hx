@@ -4,8 +4,7 @@ import flambe.Entity;
 import flambe.System;
 import flambe.asset.AssetPack;
 import flambe.asset.Manifest;
-import flambe.display.FillSprite;
-import flambe.display.ImageSprite;
+import flambe.display.*;
 
 class CockpitMain
 {
@@ -17,19 +16,26 @@ class CockpitMain
         // Load up the compiled pack in the assets directory named "bootstrap"
         var manifest = Manifest.build("bootstrap");
         var loader = System.loadAssetPack(manifest);
-        loader.get(onSuccess);
+        loader.get(function (pack) {
+            var ctx = new CockpitContext(pack);
+            start(ctx);
+        });
     }
 
-    private static function onSuccess (pack :AssetPack)
+    private static function start (ctx :CockpitContext)
     {
-        // Add a solid color background
-        var background = new FillSprite(0x202020, System.stage.width, System.stage.height);
-        System.root.addChild(new Entity().add(background));
+        var screen = new Entity();
+        System.root.addChild(screen);
 
-        // Add a plane that moves along the screen
-        var plane = new ImageSprite(pack.getTexture("plane"));
-        plane.x._ = 30;
-        plane.y.animateTo(200, 6);
-        System.root.addChild(new Entity().add(plane));
+        var background = new FillSprite(0x202020, System.stage.width, System.stage.height);
+        screen.addChild(new Entity().add(background));
+
+        var widget = new SimpleWidget();
+        widget.set(0.2);
+
+        var button = new Entity()
+            .add(new FillSprite(0xff0000, 50, 50))
+            .add(new SimpleWidget());
+        screen.addChild(button);
     }
 }

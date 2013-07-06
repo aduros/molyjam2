@@ -1,7 +1,7 @@
 package molyjam.cockpit;
 
 import flambe.Component;
-import flambe.Sprite;
+import flambe.display.Sprite;
 
 class Widget extends Component
 {
