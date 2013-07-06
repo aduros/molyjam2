@@ -39,7 +39,35 @@ Ideas:
 
 Widgets:
 1.) http://www.iradis.org/projects/virtualpanels/overhead.gif
-2.) 
+2.) Displays
+    a.) Altimeter
+    b.) Horizon (Maybe phone can alter, affects autopilot?)
+    c.) Compass
+    d.) Climb/Level meter
+    e.) Fuel Level
+    f.) Oil Pressure
+    g.) Hydrolic pressure
+    h.) Radio frequency
+    i.) Temperature (causes wings to freeze?)
+    j.) Air speed indicator
+    h.) Battery faults
+3.) Buttons
+    a.) Auto-pilot on
+    b.) Fuel dump (possibly a slow dump, disabled by pilot pressing the button.)
+    c.) Fire chute (pull graphic?)
+    d.) Call stewardess (pilot-only, blinks yellow when available)
+    e.) Fire extiguishers (per engine, possibly locked - will disable an engine if both unlocked and hit).
+    f.) Toilet fault?
+    g.) Engine enable/disable
+4.) Dials
+    a.) Flaps
+    b.) Temperature control (indoors and out?)
+    c.) Wipers enabled - fast/slow/off, left and right.
+    d.) Battery Power Source (if batteries get disabled)
+    e.) Radio frequency set
+    f.) Autopilot direction
+5.) Steering (Pitch/Yaw)
+6.) Throttle
 
 Server:
 1.) Makes a map for each session of inputs to behaviors/buttons?
