@@ -1,0 +1,28 @@
+1.) Some form of puzzle-platformer using right trigger to unlock more areas. Possibly also top-down.
+2.) Bike idea. Graduate from training wheels up to rad bmxing and unicycle. Physics-based, qwoppish.
+
+3.) Pilot plane. Pilot is trying to prevent crash, other players on phone are trying to crash.
+a.) Pilot's view, at least intrument panel. Potentially smaller windows for top-down or side view.
+b.) Phone/Tablet view - Apps
+	i.) Facebook
+	ii.) Twitter
+	iii.) Google
+	iv.) instagram
+	v.) take pictures
+	vi.) (angry birds? - furious fowls)
+	vii.) (calculator maybe?)
+	viii.) Set an alarm? Cockpit maybe? Or perhaps specific activity? Every 30 seconds? Noise type dictates alarm behavior.
+
+Plane view:
+1.) Spinny meters that can go into red.
+2.) Horizon meter.
+3.) Buttons that are on/off with light
+4.) Switches that are on/off with light?
+5.) Indicators of error with rotating switches
+6.) Two-phase buttons, require phone users to find the first option first, the second option second.
+7.) Stick-switches.
+8.) Toilet fault
+9.) 
+
+Ideas:
+1.) 
