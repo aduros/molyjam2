@@ -11,6 +11,7 @@ class Widget extends Component
 
     public function set (val :Float) :Bool
     {
+        // TODO: Round this instead of floor, then lock to [0..1].
         var i = (_segments == 0) ? 0 : (val / (1.0 / _segments));
         if ((_segments == 0) || (Math.floor(i) == i)) {
             _value = val;

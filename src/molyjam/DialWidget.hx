@@ -15,7 +15,7 @@ class DialWidget extends Widget
     override public function onUpdate (dt :Float)
     {
         var sprite = owner.get(Sprite);
-        sprite.rotation._ = (_maxRot - _minRot) * _value + _minRot;
+        sprite.rotation._ = (_maxRot - _minRot) * _displayValue + _minRot;
     }
 
     private var _minRot :Float;

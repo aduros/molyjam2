@@ -12,6 +12,6 @@ class ButtonWidget extends Widget
     {
         // How do two-image sprites? Is there an instanceof in haxe?
         var sprite = owner.get(Sprite);
-        sprite.rotation._ = (_val == 0) ? 0 : 180;
+        sprite.rotation._ = (_displayVal == 0) ? 0 : 180;
     }
 }
