@@ -30,12 +30,22 @@ class CockpitMain
         var background = new FillSprite(0x202020, System.stage.width, System.stage.height);
         screen.addChild(new Entity().add(background));
 
-        var widget = new SimpleWidget();
-        widget.set(0.2);
+        var y = 0;
+        for (widget in ctx.game.widgets) {
+            var display = createDisplay(widget);
+            display.get(Sprite).setXY(0, y);
+            screen.addChild(display);
+            y += 60;
+        }
+    }
 
-        var button = new Entity()
-            .add(new FillSprite(0xff0000, 50, 50))
-            .add(new SimpleWidget());
-        screen.addChild(button);
+    private static function createDisplay (data :WidgetData) :Entity
+    {
+        switch (data.type) {
+        case Altitude:
+            return new Entity()
+                .add(new FillSprite(0xff0000, 50, 50))
+                .add(new AltitudeDisplay(data));
+        }
     }
 }
