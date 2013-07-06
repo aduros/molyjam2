@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "connect": "~2.8.3",
+    "websocket": "~1.0.8"
+  }
+}

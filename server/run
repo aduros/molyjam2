@@ -1,0 +1,10 @@
+#!/bin/sh -e
+#
+# From this directory:
+# 1. `npm install`
+# 2. `haxelib install nodejs`
+# 3. run this script
+
+haxe -lib nodejs -js index.js -cp src -cp ../src -main molyjam.server.ServerMain
+
+node index.js
