@@ -28,6 +28,7 @@ class Match
 
     private function onCockpitMessage (event :String, data :Dynamic)
     {
+        trace("Got event from cockpit: " + event);
         switch (event) {
         case "toggle":
             var widgetIdx = cast data;

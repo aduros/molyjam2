@@ -3,6 +3,7 @@ package molyjam.cockpit;
 import js.html.WebSocket;
 
 import flambe.asset.AssetPack;
+import flambe.util.Assert;
 import flambe.util.Value;
 
 import molyjam.Channel;
@@ -18,23 +19,26 @@ class CockpitContext
 
     public var game (default, null) :Value<GameData>;
 
-    public function new (pack :AssetPack, channel :Channel)
+    // Because passing contexts around is for dorks
+    public static var instance (default, null) :CockpitContext;
+
+    private function new (pack :AssetPack, server :Channel)
     {
         this.pack = pack;
-        _channel = channel;
+        _server = server;
 
         game = new Value<GameData>(null);
 
-        _channel.messaged.connect(onMessage);
-        _channel.closed.connect(function () {
+        _server.messaged.connect(onMessage);
+        _server.closed.connect(function () {
             trace("Oh noes, you are disconnected!");
         });
-        _channel.send("cockpit_login");
+        _server.send("cockpit_login");
     }
 
     public function sendToggle (data :WidgetData)
     {
-        _channel.send("toggle", game._.widgets.indexOf(data));
+        _server.send("toggle", game._.widgets.indexOf(data));
     }
 
     private function onMessage (event :String, data :Dynamic)
@@ -48,5 +52,12 @@ class CockpitContext
         }
     }
 
-    private var _channel :Channel;
+    public static function init (pack :AssetPack, server :Channel)
+    {
+        // Make sure it hasn't already been setup
+        Assert.that(instance == null);
+        instance = new CockpitContext(pack, server);
+    }
+
+    private var _server :Channel;
 }

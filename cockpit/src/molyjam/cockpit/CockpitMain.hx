@@ -25,18 +25,21 @@ class CockpitMain
             };
             _socket.onopen = function (_) {
                 trace("Game connected!");
-                var ctx = new CockpitContext(pack, new Channel(_socket));
+                CockpitContext.init(pack, new Channel(_socket));
+                var ctx = CockpitContext.instance;
 
                 // Wait for the GameData to come in from the server
                 ctx.game.changed.connect(function (game,_) {
-                    start(ctx);
+                    start();
                 });
             };
         });
     }
 
-    private static function start (ctx :CockpitContext)
+    private static function start ()
     {
+        var ctx = CockpitContext.instance;
+
         var screen = new Entity();
         System.root.addChild(screen);
 
