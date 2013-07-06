@@ -40,13 +40,20 @@ class CockpitMain
         var screen = new Entity();
         System.root.addChild(screen);
 
-        var background = new ImageSprite(ctx.pack.getTexture("horizon"));
-        screen.addChild(new Entity().add(background).add(new BackgroundDisplay()));
+        var sky = new FillSprite(0xb9deec, System.stage.width, System.stage.height);
+        screen.addChild(new Entity().add(sky));
+        var earth = new FillSprite(0x684e3c, System.stage.width * 2, System.stage.height * 2).setAnchor(System.stage.width / 2, 0);
+        var pdata = new WidgetData(WidgetType.Pitch);
+        var ydata = new WidgetData(WidgetType.Yaw);
+        ctx.game._.widgets.push(pdata);
+        ctx.game._.widgets.push(ydata);        
+        screen.addChild(new Entity().add(earth).add(new BackgroundDisplay(pdata, ydata)));
 
         var y = 0;
         for (widget in ctx.game._.widgets) {
             var display = createDisplay(widget);
-            display.get(Sprite).setXY(0, y);
+            var s = display.get(Sprite);
+            s.setXY(0, y);
             screen.addChild(display);
             y += 60;
         }
@@ -56,6 +63,10 @@ class CockpitMain
     {
         switch (data.type) {
         case Altitude:
+            return new Entity()
+                .add(new FillSprite(0xff0000, 50, 50))
+                .add(new AltitudeDisplay(data));
+        default:
             return new Entity()
                 .add(new FillSprite(0xff0000, 50, 50))
                 .add(new AltitudeDisplay(data));
