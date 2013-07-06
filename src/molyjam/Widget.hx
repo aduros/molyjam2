@@ -14,11 +14,19 @@ class Widget extends Component
         var i = (_segments == 0) ? 0 : (val / (1.0 / _segments));
         if ((_segments == 0) || (Math.floor(i) == i)) {
             _value = val;
+            _displayValue = val;
             return true;
         }
         return false;
     }
 
+
+    public function setDisplayValue (val :Float) :Void
+    {
+        _displayValue = val;
+    }
+
+    private var _displayValue :Float;
     private var _value :Float;
     private var _segments :Int;
 }
