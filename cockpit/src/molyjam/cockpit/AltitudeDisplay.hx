@@ -13,7 +13,9 @@ class AltitudeDisplay extends WidgetDisplay
     override public function onAdded ()
     {
         var sprite = owner.get(Sprite);
-        sprite.pointerDown.connect(function (event) {  });
+        sprite.pointerDown.connect(function (event) {
+            CockpitContext.instance.sendToggle(_data);
+        });
     }
 
     override public function onUpdate (dt :Float)
