@@ -1,3 +1,5 @@
+package molyjam.cockpit;
+
 import flambe.Component;
 import flambe.Sprite;
 

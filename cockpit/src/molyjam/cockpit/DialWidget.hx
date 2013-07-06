@@ -1,4 +1,5 @@
-import Widget;
+package molyjam.cockpit;
+
 import flambe.Sprite;
 import flambe.ImageSprite;
 

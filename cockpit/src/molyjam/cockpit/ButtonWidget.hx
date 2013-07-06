@@ -1,4 +1,4 @@
-import Widget;
+package molyjam.cockpit;
 
 class ButtonWidget extends Widget
 {
