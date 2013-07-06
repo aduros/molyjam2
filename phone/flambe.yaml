@@ -7,4 +7,4 @@ id: com.molyjam.blahblah
 main: molyjam.phone.PhoneMain
 
 # Optional flags to pass to the Haxe compiler
-haxe_flags: -cp ../src
+haxe_flags: -cp ../src -D flambe_enable_catapult
