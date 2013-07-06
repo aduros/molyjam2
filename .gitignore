@@ -1,4 +1,4 @@
-/build/
+build/
 .flambe-cache/
 
 server/index.js

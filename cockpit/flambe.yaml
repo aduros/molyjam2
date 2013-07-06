@@ -1,10 +1,10 @@
 # The name, version and identifier, for mobile app packaging
-name: Free Onboard WiFi
+name: Boering 747
 version: 1.0.0
 id: com.molyjam.blahblah
 
 # The main class name
-main: molyjam.PhoneMain
+main: molyjam.cockpit.CockpitMain
 
 # Optional flags to pass to the Haxe compiler
-# haxe_flags: -lib nape -cp another_dir
+haxe_flags: -cp ../src

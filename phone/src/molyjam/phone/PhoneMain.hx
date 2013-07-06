@@ -1,4 +1,4 @@
-package molyjam;
+package molyjam.phone;
 
 import flambe.Entity;
 import flambe.System;
@@ -7,7 +7,7 @@ import flambe.asset.Manifest;
 import flambe.display.FillSprite;
 import flambe.display.ImageSprite;
 
-class CockpitMain
+class PhoneMain
 {
     private static function main ()
     {
