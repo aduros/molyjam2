@@ -62,10 +62,11 @@ Widgets:
     h.) Eject?
     i.) Air brakes
     j.) Equipment cooling
-    k.) Cabin defogger?
+    k.) Cabin defogger?    
     l.) Normalize hydrolic pressure (denormalize if already normalized)
     m.) Normalize oil pressure (denormalize if already normalized)
     n.) Landing gear
+    o.) Lights
 4.) Dials
     a.) Flaps
     b.) Temperature control (indoors and out?)    
