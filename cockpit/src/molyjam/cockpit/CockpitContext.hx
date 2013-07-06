@@ -9,6 +9,8 @@ import molyjam.Channel;
 import molyjam.Config;
 import molyjam.GameData;
 
+using flambe.util.Arrays;
+
 /** All the client state goes here. */
 class CockpitContext
 {
@@ -28,6 +30,11 @@ class CockpitContext
             trace("Oh noes, you are disconnected!");
         });
         _channel.send("cockpit_login");
+    }
+
+    public function sendToggle (data :WidgetData)
+    {
+        _channel.send("toggle", game._.widgets.indexOf(data));
     }
 
     private function onMessage (event :String, data :Dynamic)

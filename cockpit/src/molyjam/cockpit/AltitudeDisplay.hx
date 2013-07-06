@@ -13,7 +13,7 @@ class AltitudeDisplay extends WidgetDisplay
     override public function onAdded ()
     {
         var sprite = owner.get(Sprite);
-        sprite.pointerDown.connect(function (event) { _data.value = (1.0 - _data.value); });
+        sprite.pointerDown.connect(function (event) {  });
     }
 
     override public function onUpdate (dt :Float)
