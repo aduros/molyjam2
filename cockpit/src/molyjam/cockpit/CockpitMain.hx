@@ -1,5 +1,7 @@
 package molyjam.cockpit;
 
+import js.html.WebSocket;
+
 import flambe.Entity;
 import flambe.System;
 import flambe.asset.AssetPack;
@@ -17,8 +19,19 @@ class CockpitMain
         var manifest = Manifest.build("bootstrap");
         var loader = System.loadAssetPack(manifest);
         loader.get(function (pack) {
-            var ctx = new CockpitContext(pack);
-            start(ctx);
+            _socket = new WebSocket("ws://"+Config.SERVER_HOST+":"+Config.SERVER_PORT);
+            _socket.onerror = function (_) {
+                trace("Connection error!");
+            };
+            _socket.onopen = function (_) {
+                trace("Game connected!");
+                var ctx = new CockpitContext(pack, new Channel(_socket));
+
+                // Wait for the GameData to come in from the server
+                ctx.game.changed.connect(function (game,_) {
+                    start(ctx);
+                });
+            };
         });
     }
 
@@ -31,7 +44,7 @@ class CockpitMain
         screen.addChild(new Entity().add(background).add(new BackgroundDisplay()));
 
         var y = 0;
-        for (widget in ctx.game.widgets) {
+        for (widget in ctx.game._.widgets) {
             var display = createDisplay(widget);
             display.get(Sprite).setXY(0, y);
             screen.addChild(display);
@@ -48,4 +61,8 @@ class CockpitMain
                 .add(new AltitudeDisplay(data));
         }
     }
+
+    // Keep a hard reference to the socket to prevent GC bugs in some browsers. Pretend this isn't
+    // here :)
+    private static var _socket :WebSocket;
 }
