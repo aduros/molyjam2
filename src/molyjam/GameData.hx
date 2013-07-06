@@ -16,4 +16,20 @@ class GameData
         widgets.push(widget);
         return widget;
     }
+
+    public function createSnapshot () :Array<Float>
+    {
+        var snapshot = [];
+        for (widget in widgets) {
+            snapshot.push(widget.value);
+        }
+        return snapshot;
+    }
+
+    public function applySnapshot (snapshot :Array<Float>)
+    {
+        for (ii in 0...snapshot.length) {
+            widgets[ii].value = snapshot[ii];
+        }
+    }
 }

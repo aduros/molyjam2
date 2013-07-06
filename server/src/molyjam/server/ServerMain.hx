@@ -21,29 +21,31 @@ class ServerMain
         }]);
         trace("Listening on "+host+":"+Config.SERVER_PORT);
 
-        var game = new GameData();
-        // Don't have duplicates eventually
-        game.addWidget(Altitude).value = 0.7;
-        game.addWidget(Altitude).value = 0.1;
-        game.addWidget(Altitude).value = 0.9;
-        game.addWidget(Altitude).value = 0.9;
-
-        var channels = [];
+        var matches = [];
         wsServer.on("connect", function (socket) {
             trace("Client connected from " + socket.remoteAddress);
 
             var channel = new Channel(socket);
-            channels.push(channel);
-
             channel.messaged.connect(function (event, data) {
                 switch (event) {
                 case "cockpit_login":
-                    trace("Got a login message from the client");
-                    channel.send("gamedata", game);
+                    var match = new Match(channel);
+                    matches.push(match);
                 case "phone_login":
                     trace("Soon");
                 };
             });
         });
+
+        var lastUpdate = Date.now().getTime();
+        Node.setInterval(function () {
+            var now = Date.now().getTime();
+            var dt = now - lastUpdate;
+            lastUpdate = now;
+
+            for (match in matches) {
+                match.update(dt);
+            }
+        }, 100);
     }
 }

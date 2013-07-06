@@ -24,6 +24,9 @@ class CockpitContext
         game = new Value<GameData>(null);
 
         _channel.messaged.connect(onMessage);
+        _channel.closed.connect(function () {
+            trace("Oh noes, you are disconnected!");
+        });
         _channel.send("cockpit_login");
     }
 
@@ -33,6 +36,8 @@ class CockpitContext
         case "gamedata":
             trace("Got GameData from server");
             game._ = data;
+        case "snapshot":
+            game._.applySnapshot(cast data);
         }
     }
 
