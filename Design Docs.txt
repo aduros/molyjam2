@@ -5,7 +5,13 @@
 a.) Pilot's view, at least intrument panel. Potentially smaller windows for top-down or side view.
 b.) Phone/Tablet view - Apps
 	i.) Facebook
+	--Just a screenshot + buttons?
+	--Scrolling through page?
+	--Different friends?
 	ii.) Twitter
+	--Scrolling through feed
+	--Replying
+
 	iii.) Google
 	iv.) instagram
 	v.) take pictures
@@ -22,7 +28,20 @@ Plane view:
 6.) Two-phase buttons, require phone users to find the first option first, the second option second.
 7.) Stick-switches.
 8.) Toilet fault
-9.) 
+9.) Altitude is health of plane
+10.) 
 
 Ideas:
-1.) 
+1.) Pics for instagram are stock photos? Or people? Picking the filter does one thing or another.
+2.) Different actions are wired up randomly at start, but identically for all clients.
+3.) Actions are a function of a widget, depending on widget type, input value will be analog or digital.
+4.) Phones may summon satellites/spaceships/aliens?
+
+Widgets:
+1.) http://www.iradis.org/projects/virtualpanels/overhead.gif
+2.) 
+
+Server:
+1.) Makes a map for each session of inputs to behaviors/buttons?
+2.) Clients only inform server of action performed, server dictates what that action actually means.
+3.) Relays that change to cockpit - cockpit is just a different client for the server.
