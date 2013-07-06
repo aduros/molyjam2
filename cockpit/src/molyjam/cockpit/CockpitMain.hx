@@ -27,8 +27,8 @@ class CockpitMain
         var screen = new Entity();
         System.root.addChild(screen);
 
-        var background = new FillSprite(0x202020, System.stage.width, System.stage.height);
-        screen.addChild(new Entity().add(background));
+        var background = new ImageSprite(ctx.pack.getTexture("horizon"));
+        screen.addChild(new Entity().add(background).add(new BackgroundDisplay()));
 
         var y = 0;
         for (widget in ctx.game.widgets) {
