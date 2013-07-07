@@ -43,15 +43,37 @@ class Match
 
         var lift = -0.05 + 0.08*wellness;
 
+        // Lift is a function of air speed, drag, and thrust.
+        // Air speed is a function of drag and thrust.
+        // Drag is a function of all the weird crap.
+        // Thrust is a function of throttle.
+        // Throttle affects fuel consumption.
+
         var altitude = get(Altitude);
         altitude.value += dt*lift;
 
         // var yawChange = (wellness-0.5) * 0.01 + (get(YawChange).value-0.5);
         // get(Yaw).value += dt*yawChange;
-        get(Yaw).value += dt * (get(YawChange).value - 0.5);
+        var yawChange = get(YawChange);
+        if (yawChange.value != _yawChange) {
+            if (Math.abs(yawChange.value - _yawChange) < 0.0001) {
+                _yawChange = yawChange.value;
+            } else {
+                _yawChange = (yawChange.value - _yawChange) / 4 + _yawChange;
+            }
+        }
+        get(Yaw).value += dt * (_yawChange - 0.5);
 
-        var pitchChange = 4*lift + (get(PitchChange).value-0.5);
-        get(Pitch).value += dt * pitchChange;
+        var pitchChange = get(PitchChange);
+        if (pitchChange.value != _pitchChange) {
+            if (Math.abs(pitchChange.value - _pitchChange) < 0.0001) {
+                pitchChange.value = _pitchChange;
+            } else {
+                _pitchChange = (pitchChange.value - _pitchChange) / 4 + _pitchChange;
+            }
+        }
+        var pitchChangeWithLift = 4*lift + (_pitchChange-0.5);
+        get(Pitch).value += dt * pitchChangeWithLift;
 
         // Update the client
         _cockpit.send("snapshot", _game.createSnapshot());
@@ -66,11 +88,9 @@ class Match
             var widget = _game.widgets[widgetIdx];
             widget.value = (widget.value == 0) ? 1 : 0;
         case "updateYawChange":
-            var yawChange = cast data;
-            get(YawChange).value = yawChange;
+            get(YawChange).value = cast data;
         case "updatePitchChange":
-            var pitchChange = cast data;
-            get(PitchChange).value = pitchChange;
+            get(PitchChange).value = cast data;
         }
     }
 
@@ -89,4 +109,8 @@ class Match
     private var _cockpit :Channel;
 
     private var _elapsed :Float = 0;
+
+    // Collection of stateful server-only variables.
+    private var _yawChange :Float = 0.5;
+    private var _pitchChange :Float = 0.5;
 }

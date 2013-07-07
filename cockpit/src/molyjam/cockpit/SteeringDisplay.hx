@@ -47,7 +47,7 @@ class SteeringDisplay extends Component
     {
         var sprite = owner.get(Sprite);
         sprite.rotation._ = _yawChange.value * 180.0 - 90.0;
-        // Locked between 1.25 and 0.75
+        // Locked between 1.1 and 0.9
         sprite.setScale((_pitchChange.value - 0.5) * 0.2 + 1.0);
 
         var pitchChangeDiff = 0.05;
@@ -64,9 +64,9 @@ class SteeringDisplay extends Component
         var yawChangeDiff = 0.05;
         var newYawChange = _yawChange.value;
         if (_leftHeld && !_rightHeld) {
-            newYawChange += yawChangeDiff;
-        } else if (_rightHeld && !_leftHeld) {
             newYawChange -= yawChangeDiff;
+        } else if (_rightHeld && !_leftHeld) {
+            newYawChange += yawChangeDiff;
         }
         if (newYawChange != _yawChange.value) {
             CockpitContext.instance.updateYawChange(newYawChange);
