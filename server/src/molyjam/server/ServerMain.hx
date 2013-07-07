@@ -2,6 +2,8 @@ package molyjam.server;
 
 import js.Node;
 
+using Lambda;
+
 class ServerMain
 {
     private static function main ()
@@ -21,7 +23,7 @@ class ServerMain
         }]);
         trace("Listening on "+host+":"+Config.SERVER_PORT);
 
-        var matches = [];
+        var matches = new Map<String,Match>();
         wsServer.on("connect", function (socket) {
             trace("Client connected from " + socket.remoteAddress);
 
@@ -29,10 +31,35 @@ class ServerMain
             channel.messaged.connect(function (event, data) {
                 switch (event) {
                 case "cockpit_login":
-                    var match = new Match(channel);
-                    matches.push(match);
+                    var name :String = cast data;
+                    var match = new Match(name, channel);
+                    if (matches.get(name) == null) {
+                        matches.set(name, match);
+                        channel.closed.connect(function () {
+                            matches.remove(name);
+                        });
+                    } else {
+                        trace("Tried to register with an already active game name: " + name);
+                    }
                 case "phone_login":
-                    trace("Soon");
+                    // Tell them the active matches
+                    var summary = [];
+                    for (match in matches) {
+                        summary.push({
+                            name: match.name,
+                            population: match.population(),
+                        });
+                    }
+                    channel.send("matches", summary);
+                case "join":
+                    var name :String = cast data;
+                    var match = matches.get(name);
+                    if (match != null) {
+                        match.addPhone(channel);
+                    } else {
+                        trace("Tried to join an invalid game name: " + name);
+                    }
+
                 };
             });
         });

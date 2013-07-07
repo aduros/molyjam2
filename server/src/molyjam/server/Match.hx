@@ -6,8 +6,12 @@ import flambe.math.FMath.*;
 /** A single hosted game. */
 class Match
 {
-    public function new (cockpit :Channel)
+    public var name (default, null) :String;
+
+    public function new (name :String, cockpit :Channel)
     {
+        this.name = name;
+
         _game = new GameData();
         _game.addWidget(Altitude).value = 1.0;
         _game.addWidget(TestToggle).value = Math.random();
@@ -25,7 +29,24 @@ class Match
 
         _cockpit = cockpit;
         _cockpit.messaged.connect(onCockpitMessage);
+        _cockpit.closed.connect(function () {
+            // Boot all the phones if the cockpit disconnects
+            for (phone in _phones) {
+                phone.close();
+            }
+        });
         _cockpit.send("gamedata", _game);
+
+        _phones = [];
+    }
+
+    public function addPhone (channel :Channel)
+    {
+        _phones.push(channel);
+        channel.closed.connect(function () {
+            _phones.remove(channel);
+        });
+        channel.messaged.connect(onPhoneMessage);
     }
 
     public function update (dt :Float)
@@ -79,6 +100,11 @@ class Match
         _cockpit.send("snapshot", _game.createSnapshot());
     }
 
+    public function population () :Int
+    {
+        return 1 + _phones.length;
+    }
+
     private function onCockpitMessage (event :String, data :Dynamic)
     {
         trace("Got event from cockpit: " + event + ", " + data);
@@ -91,6 +117,16 @@ class Match
             get(YawChange).value = cast data;
         case "updatePitchChange":
             get(PitchChange).value = cast data;
+        }
+    }
+
+    private function onPhoneMessage (event :String, data :Dynamic)
+    {
+        trace("Got event from phone: " + event + ", " + data);
+        switch (event) {
+        case "poke":
+            // Not what we want, but illustrative for now
+            get(Pitch).value = Math.random();
         }
     }
 
@@ -107,6 +143,7 @@ class Match
 
     private var _game :GameData;
     private var _cockpit :Channel;
+    private var _phones :Array<Channel>;
 
     private var _elapsed :Float = 0;
 

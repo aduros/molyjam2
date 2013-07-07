@@ -1,5 +1,7 @@
 package molyjam.phone;
 
+import js.html.WebSocket;
+
 import flambe.Entity;
 import flambe.System;
 import flambe.asset.AssetPack;
@@ -17,19 +19,18 @@ class PhoneMain
         // Load up the compiled pack in the assets directory named "bootstrap"
         var manifest = Manifest.build("bootstrap");
         var loader = System.loadAssetPack(manifest);
-        loader.get(onSuccess);
+        loader.get(function (pack) {
+            _socket = new WebSocket("ws://"+Config.SERVER_HOST+":"+Config.SERVER_PORT);
+            _socket.onerror = function (_) {
+                trace("Connection error!");
+            };
+            _socket.onopen = function (_) {
+                PhoneContext.init(pack, new Channel(_socket));
+            };
+        });
     }
 
-    private static function onSuccess (pack :AssetPack)
-    {
-        // Add a solid color background
-        var background = new FillSprite(0x202020, System.stage.width, System.stage.height);
-        System.root.addChild(new Entity().add(background));
-
-        // Add a plane that moves along the screen
-        var plane = new ImageSprite(pack.getTexture("plane"));
-        plane.x._ = 30;
-        plane.y.animateTo(200, 6);
-        System.root.addChild(new Entity().add(plane));
-    }
+    // Keep a hard reference to the socket to prevent GC bugs in some browsers. Pretend this isn't
+    // here :)
+    private static var _socket :WebSocket;
 }

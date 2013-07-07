@@ -1,6 +1,9 @@
-package molyjam.cockpit;
+package molyjam.phone;
 
+import flambe.System;
 import flambe.asset.AssetPack;
+import flambe.display.Font;
+import flambe.scene.Director;
 import flambe.util.Assert;
 import flambe.util.Value;
 
@@ -11,53 +14,51 @@ import molyjam.GameData;
 using flambe.util.Arrays;
 
 /** All the client state goes here. */
-class CockpitContext
+class PhoneContext
 {
     public var pack (default, null) :AssetPack;
+    public var font (default, null) :Font;
 
-    public var game (default, null) :Value<GameData>;
+    // Scene management
+    public var director (default, null) :Director;
 
     // Because passing contexts around is for dorks
-    public static var instance (default, null) :CockpitContext;
+    public static var instance (default, null) :PhoneContext;
 
     private function new (pack :AssetPack, server :Channel)
     {
         this.pack = pack;
+        font = new Font(pack, "tinyfont");
         _server = server;
 
-        game = new Value<GameData>(null);
+        director = new Director();
+        System.root.add(director);
 
         _server.messaged.connect(onMessage);
         _server.closed.connect(function () {
             trace("Oh noes, you are disconnected!");
         });
-        // FIXME(bruno): Generate the name serverside
-        _server.send("cockpit_login", Std.int(Math.random()*1000));
+        _server.send("phone_login");
     }
 
-    public function sendToggle (data :WidgetData)
+    public function join (name :String)
     {
-        _server.send("toggle", game._.widgets.indexOf(data));
+        _server.send("join", name);
+        director.unwindToScene(PlayingScene.create());
     }
 
-    public function updateYawChange (newChange :Float)
+    public function poke ()
     {
-        _server.send("updateYawChange", newChange);
-    }
-
-    public function updatePitchChange (newChange :Float)
-    {
-        _server.send("updatePitchChange", newChange);
+        _server.send("poke");
     }
 
     private function onMessage (event :String, data :Dynamic)
     {
+        trace("Got message " + event);
         switch (event) {
-        case "gamedata":
-            trace("Got GameData from server");
-            game._ = data;
-        case "snapshot":
-            game._.applySnapshot(cast data);
+        case "matches":
+            var matches :Array<Dynamic> = cast data;
+            director.unwindToScene(MatchesScene.create(matches));
         }
     }
 
@@ -65,7 +66,7 @@ class CockpitContext
     {
         // Make sure it hasn't already been setup
         Assert.that(instance == null);
-        instance = new CockpitContext(pack, server);
+        instance = new PhoneContext(pack, server);
     }
 
     private var _server :Channel;
