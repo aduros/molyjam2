@@ -43,10 +43,6 @@ class CockpitMain
         var screen = new Entity();
         System.root.addChild(screen);
 
-        var sky = new FillSprite(0xb9deec, System.stage.width, System.stage.height);
-        screen.addChild(new Entity().add(sky));
-        var earth = new FillSprite(0x684e3c, System.stage.width * 2, System.stage.height * 2).setAnchor(System.stage.width / 2, 0);
-
         var pdata :WidgetData = null;
         var ydata :WidgetData = null;
         var y = 0;
@@ -57,20 +53,21 @@ class CockpitMain
             screen.addChild(display);
             y += 60;
 
-            trace("widget: " + widget);
-            
             switch(widget.type) {
                 case Pitch:
                     pdata = widget;
-                    break;
                 case Yaw:
                     ydata = widget;
-                    break;
                 default:
             }
         }
-        trace("pdata: " + pdata + "ydata: " + ydata);
-        screen.addChild(new Entity().add(earth).add(new BackgroundDisplay(pdata, ydata)));
+
+
+        // Reverse-order these so we can add earth last.
+        var earth = new FillSprite(0x684e3c, System.stage.width * 2, System.stage.height * 2).setAnchor(System.stage.width / 2, 0);
+        screen.addChild(new Entity().add(earth).add(new BackgroundDisplay(pdata, ydata)), false);
+        var sky = new FillSprite(0xb9deec, System.stage.width, System.stage.height);
+        screen.addChild(new Entity().add(sky), false);
     }
 
     private static function createDisplay (data :WidgetData) :Entity
