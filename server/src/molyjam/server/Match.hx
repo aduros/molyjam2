@@ -147,10 +147,10 @@ class Match
     {
         trace("Got event from cockpit: " + event + ", " + data);
         switch (event) {
-        case "toggle":
-            var widgetIdx = cast data;
+        case "set":
+            var widgetIdx :Int = data.idx;
             var widget = _game.widgets[widgetIdx];
-            widget.value = (widget.value == 0) ? 1 : 0;
+            widget.value = data.value;
         case "updateYawChange":
             get(YawChange).value = cast data;
         case "updatePitchChange":

@@ -14,7 +14,7 @@ class TestDisplay extends WidgetDisplay
     {
         var sprite = owner.get(Sprite);
         sprite.pointerDown.connect(function (event) {
-            CockpitContext.instance.sendToggle(_data);
+            CockpitContext.instance.toggleWidget(_data);
         });
     }
 

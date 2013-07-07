@@ -37,9 +37,24 @@ class CockpitContext
         _server.send("cockpit_login");
     }
 
-    public function sendToggle (data :WidgetData)
+    public function toggleWidget (data :WidgetData)
     {
-        _server.send("toggle", game._.widgets.indexOf(data));
+        var idx = game._.widgets.indexOf(data);
+        _server.send("set", {
+            idx: idx,
+            value: (data.value == 0) ? 1 : 0,
+        });
+    }
+
+    public function incrementWidget (data :WidgetData, states :Int)
+    {
+        var idx = game._.widgets.indexOf(data);
+        var currentState = data.getSegment(states);
+        var newState = (currentState+1) % states;
+        _server.send("set", {
+            idx: idx,
+            value: newState/states,
+        });
     }
 
     public function updateYawChange (newChange :Float)

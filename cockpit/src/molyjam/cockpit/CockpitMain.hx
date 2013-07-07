@@ -96,6 +96,10 @@ class CockpitMain
             return new Entity()
                 .add(new FillSprite(0xff0000, 50, 50))
                 .add(new AltitudeDisplay(data));
+        // case Fuel:
+        //     return new Entity()
+        //         .add(new ImageSprite(null))
+        //         .add(new KnobDisplay(data, 4));
         default:
             return new Entity()
                 .add(new FillSprite(0xff0000, 50, 50))
