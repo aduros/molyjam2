@@ -5,6 +5,7 @@ import js.Browser;
 import flambe.asset.AssetPack;
 import flambe.util.Assert;
 import flambe.util.Value;
+import flambe.util.Signal1;
 
 import molyjam.Channel;
 import molyjam.Config;
@@ -19,6 +20,8 @@ class CockpitContext
 
     public var game (default, null) :Value<GameData>;
 
+    public var gameover (default, null) :Signal1<Float>;
+
     // Because passing contexts around is for dorks
     public static var instance (default, null) :CockpitContext;
 
@@ -28,6 +31,7 @@ class CockpitContext
         _server = server;
 
         game = new Value<GameData>(null);
+        gameover = new Signal1();
 
         _server.messaged.connect(onMessage);
         _server.closed.connect(function () {
@@ -75,6 +79,9 @@ class CockpitContext
             game._ = data;
         case "snapshot":
             game._.applySnapshot(cast data);
+        case "gameover":
+            var score :Float = cast data;
+            gameover.emit(score);
         }
     }
 

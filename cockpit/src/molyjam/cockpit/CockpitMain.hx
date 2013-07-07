@@ -7,6 +7,7 @@ import flambe.System;
 import flambe.asset.AssetPack;
 import flambe.asset.Manifest;
 import flambe.display.*;
+import flambe.script.*;
 
 class CockpitMain
 {
@@ -43,6 +44,9 @@ class CockpitMain
         var screen = new Entity();
         System.root.addChild(screen);
 
+        _crashHolder = new Entity();
+        screen.addChild(_crashHolder);
+
         var left = new ImageSprite(ctx.pack.getTexture("cockpit-half"));
         screen.addChild(new Entity().add(left));
         var right = new ImageSprite(left.texture).setScaleXY(-1, 1).setXY(2*left.texture.width, 0);
@@ -52,13 +56,21 @@ class CockpitMain
         var ydata :WidgetData = null;
         var pchange :WidgetData = null;
         var ychange :WidgetData = null;
-        var y = 0;
+        var x = 192;
+        var y = 432;
+        var ii = 0;
         for (widget in ctx.game._.widgets) {
             var display = createDisplay(widget);
             var s = display.get(Sprite);
-            s.setXY(widget.type == TestToggle ? 100 : 0, y);
+            s.setXY(x, y);
             screen.addChild(display);
-            y += 60;
+            x += 96;
+
+            ++ii;
+            if (ii == 7) {
+                x = 48;
+                y = 576;
+            }
 
             switch(widget.type) {
                 case Pitch:
@@ -85,6 +97,31 @@ class CockpitMain
 
         var sky = new FillSprite(0xb9deec, System.stage.width, System.stage.height);
         screen.addChild(new Entity().add(sky), false);
+
+        ctx.gameover.connect(showGameOver);
+    }
+
+    private static function showGameOver (score :Float)
+    {
+        var ctx = CockpitContext.instance;
+        var left = new ImageSprite(null);
+        var right :ImageSprite = cast new ImageSprite(null).setScaleXY(-1, 1).setXY(System.stage.width, 0);
+        _crashHolder.addChild(new Entity().add(left));
+        _crashHolder.addChild(new Entity().add(right));
+
+        var frame = 0;
+        var nextFrame = function () {
+            ++frame;
+            left.texture = right.texture = ctx.pack.getTexture("cockpit-crash/frame"+frame);
+        };
+        nextFrame();
+
+        var script = new Script();
+        script.run(new Repeat(new Sequence([
+            new CallFunction(nextFrame),
+            new Delay(0.2),
+        ]), 6));
+        _crashHolder.add(script);
     }
 
     private static function createDisplay (data :WidgetData) :Entity
@@ -108,6 +145,8 @@ class CockpitMain
                 .add(new AltitudeDisplay(data));
         }
     }
+
+    private static var _crashHolder :Entity; // yeehaw
 
     // Keep a hard reference to the socket to prevent GC bugs in some browsers. Pretend this isn't
     // here :)

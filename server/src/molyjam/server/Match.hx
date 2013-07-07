@@ -17,10 +17,10 @@ class Match
         _widgetMap = new Map();
 
         addWidget(Altitude, 1.0);
-        addWidget(TestToggle, Math.random());
-        addWidget(TestToggle, Math.random());
-        addWidget(TestToggle, Math.random());
-        addWidget(TestToggle, Math.random());
+        // addWidget(TestToggle, Math.random());
+        // addWidget(TestToggle, Math.random());
+        // addWidget(TestToggle, Math.random());
+        // addWidget(TestToggle, Math.random());
 
         addWidget(Yaw, 0.5);
         addWidget(YawChange, 0.5);
@@ -83,7 +83,22 @@ class Match
         channel.messaged.connect(onPhoneMessage);
     }
 
-    public function update (dt :Float)
+    public function broadcast (event :String, data :Dynamic)
+    {
+        for (phone in _phones) {
+            phone.send(event, data);
+        }
+        _cockpit.send(event, data);
+    }
+
+    public function sendGameOver ()
+    {
+        broadcast("gameover", {
+            score: 0,
+        });
+    }
+
+    public function update (dt :Float) :Bool
     {
         _elapsed += dt;
 
@@ -132,6 +147,7 @@ class Match
 
         // Update the client
         _cockpit.send("snapshot", _game.createSnapshot());
+        return altitude.value <= 0;
     }
 
     public function toSummary () :Dynamic

@@ -63,7 +63,10 @@ class ServerMain
             lastUpdate = now;
 
             for (match in matches) {
-                match.update(dt/1000);
+                if (match.update(dt/1000)) {
+                    match.sendGameOver();
+                    matches.remove(match.id);
+                }
             }
         }, 100);
     }
