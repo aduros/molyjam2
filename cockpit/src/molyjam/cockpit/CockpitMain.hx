@@ -73,6 +73,10 @@ class CockpitMain
     private static function createDisplay (data :WidgetData) :Entity
     {
         switch (data.type) {
+        case TestToggle:
+            return new Entity()
+                .add(new FillSprite(0xff0000, 50, 50))
+                .add(new TestDisplay(data));
         case Altitude:
             return new Entity()
                 .add(new FillSprite(0xff0000, 50, 50))
