@@ -7,6 +7,7 @@ import flambe.asset.AssetPack;
 import flambe.display.*;
 import flambe.scene.Director;
 import flambe.scene.SlideTransition;
+import flambe.scene.FadeTransition;
 import flambe.util.Assert;
 import flambe.util.Signal0;
 import flambe.util.Signal2;
@@ -120,6 +121,12 @@ class PhoneContext
         case "matches":
             var matches :Array<Dynamic> = cast data;
             director.unwindToScene(MatchesScene.create(matches));
+        case "gameover":
+            var score :Float = cast data;
+            var overlay = new Entity().add(new FillSprite(0xffffff, System.stage.width,
+                System.stage.height));
+            overlay.addChild(new Entity().add(new ImageSprite(pack.getTexture("win"))));
+            director.unwindToScene(overlay, new FadeTransition(2));
         }
     }
 
