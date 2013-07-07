@@ -41,6 +41,16 @@ class CockpitContext
         _server.send("toggle", game._.widgets.indexOf(data));
     }
 
+    public function updateYawChange (newChange :Float)
+    {
+        _server.send("updateYawChange", newChange);
+    }
+
+    public function updatePitchChange (newChange :Float)
+    {
+        _server.send("updatePitchChange", newChange);
+    }
+
     private function onMessage (event :String, data :Dynamic)
     {
         switch (event) {

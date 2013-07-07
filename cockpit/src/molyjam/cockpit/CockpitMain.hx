@@ -43,11 +43,13 @@ class CockpitMain
         var screen = new Entity();
         System.root.addChild(screen);
 
-        var frame = new ImageSprite(ctx.pack.getTexture("planeframe2")).setScale(4);
+        var frame = new ImageSprite(ctx.pack.getTexture("cockpit"));
         screen.addChild(new Entity().add(frame));
 
         var pdata :WidgetData = null;
         var ydata :WidgetData = null;
+        var pchange :WidgetData = null;
+        var ychange :WidgetData = null;
         var y = 0;
         for (widget in ctx.game._.widgets) {
             var display = createDisplay(widget);
@@ -61,10 +63,18 @@ class CockpitMain
                     pdata = widget;
                 case Yaw:
                     ydata = widget;
+                case PitchChange:
+                    pchange = widget;
+                case YawChange:
+                    ychange = widget;
                 default:
             }
         }
 
+        var wheel = new ImageSprite(ctx.pack.getTexture("wheel"));
+        wheel.setAnchor(wheel.getNaturalWidth() / 2, wheel.getNaturalHeight() / 2);
+        wheel.setXY(System.stage.width / 2, System.stage.height);
+        screen.addChild(new Entity().add(wheel).add(new SteeringDisplay(pchange, ychange)));
 
         // Reverse-order these so we can add earth last.
         var earth = new FillSprite(0x684e3c, System.stage.width * 2, System.stage.height * 2);

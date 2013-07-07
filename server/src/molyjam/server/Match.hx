@@ -1,6 +1,7 @@
 package molyjam.server;
 
 import flambe.util.Assert;
+import flambe.math.FMath.*;
 
 /** A single hosted game. */
 class Match
@@ -47,10 +48,10 @@ class Match
 
         // var yawChange = (wellness-0.5) * 0.01 + (get(YawChange).value-0.5);
         // get(Yaw).value += dt*yawChange;
-        get(Yaw).value = 0.5*Math.sin(_elapsed/10) + 0.5;
+        get(Yaw).value += dt * (get(YawChange).value - 0.5);
 
         var pitchChange = 4*lift + (get(PitchChange).value-0.5);
-        get(Pitch).value += dt*pitchChange;
+        get(Pitch).value += dt * pitchChange;
 
         // Update the client
         _cockpit.send("snapshot", _game.createSnapshot());
@@ -64,6 +65,12 @@ class Match
             var widgetIdx = cast data;
             var widget = _game.widgets[widgetIdx];
             widget.value = (widget.value == 0) ? 1 : 0;
+        case "updateYawChange":
+            var yawChange = cast data;
+            get(YawChange).value = yawChange;
+        case "updatePitchChange":
+            var pitchChange = cast data;
+            get(PitchChange).value = pitchChange;
         }
     }
 

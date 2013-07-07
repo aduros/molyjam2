@@ -82,3 +82,28 @@ Server:
 1.) Makes a map for each session of inputs to behaviors/buttons?
 2.) Clients only inform server of action performed, server dictates what that action actually means.
 3.) Relays that change to cockpit - cockpit is just a different client for the server.
+
+Tasks:
+1.) Phone client
+    a.) Desktop for accessing 'apps'.
+    b.) Apps themselves
+        i.) Headtome - facebook
+        ii.) Instagram
+        iii.) Safari with Google.
+        iv.) Wikipanion?
+        v.) Some game? - Angry Birds, Words with Friends
+        vi.) Tooter - Twitter
+        vii.) 
+    c.) How do these play into the main thing?
+2.) Side view/top view.
+    a.) Bearing and crashy.
+    b.) Would make chute visible.
+3.) Button graphics
+    a.) Text
+4.) Dial graphics
+    b.) Text
+5.) Work out actual information types.
+    a.) What the buttons mean, what the behavior of the buttons is.
+    b.) Do they all just contribute to a joint unhealth, or do they affect things directly?
+6.) Work out actual plane logic.
+    a.) Lift, drag, thrust, velocity.
