@@ -13,10 +13,14 @@ class BackgroundDisplay extends Component
     }
 
     override public function onUpdate (dt :Float)
-    {        
+    {
         var sprite = owner.get(Sprite);
-        sprite.rotation._ = _yaw.value * 360.0;
-        sprite.setXY(System.stage.width / 2, System.stage.height * _pitch.value);
+
+        var maxRoll = 90;
+        sprite.rotation._ = (_yaw.value-0.5) * maxRoll;
+
+        var maxOffset = 200;
+        sprite.setXY(System.stage.width/2, System.stage.height/2 + maxOffset*(2*_pitch.value-1));
     }
 
     private var _pitch :WidgetData;

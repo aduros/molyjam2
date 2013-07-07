@@ -43,6 +43,9 @@ class CockpitMain
         var screen = new Entity();
         System.root.addChild(screen);
 
+        var frame = new ImageSprite(ctx.pack.getTexture("planeframe2")).setScale(4);
+        screen.addChild(new Entity().add(frame));
+
         var pdata :WidgetData = null;
         var ydata :WidgetData = null;
         var y = 0;
@@ -64,8 +67,10 @@ class CockpitMain
 
 
         // Reverse-order these so we can add earth last.
-        var earth = new FillSprite(0x684e3c, System.stage.width * 2, System.stage.height * 2).setAnchor(System.stage.width / 2, 0);
+        var earth = new FillSprite(0x684e3c, System.stage.width * 2, System.stage.height * 2);
+        earth.setAnchor(earth.getNaturalWidth()/2, 0);
         screen.addChild(new Entity().add(earth).add(new BackgroundDisplay(pdata, ydata)), false);
+
         var sky = new FillSprite(0xb9deec, System.stage.width, System.stage.height);
         screen.addChild(new Entity().add(sky), false);
     }
