@@ -106,4 +106,5 @@ Tasks:
     a.) What the buttons mean, what the behavior of the buttons is.
     b.) Do they all just contribute to a joint unhealth, or do they affect things directly?
 6.) Work out actual plane logic.
-    a.) Lift, drag, thrust, velocity.
+    a.) Lift, drag, thrust, weight.
+7.) Grid arrangement of pieces for pilot.

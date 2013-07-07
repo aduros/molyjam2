@@ -13,19 +13,52 @@ class Match
         this.name = name;
 
         _game = new GameData();
-        _game.addWidget(Altitude).value = 1.0;
-        _game.addWidget(TestToggle).value = Math.random();
-        _game.addWidget(TestToggle).value = Math.random();
-        _game.addWidget(TestToggle).value = Math.random();
-        _game.addWidget(TestToggle).value = Math.random();
+        _widgetMap = new Map();
 
-        _game.addWidget(Yaw).value = 0.5;
-        _game.addWidget(YawChange).value = 0.5;
+        addWidget(Altitude, 1.0);
+        addWidget(TestToggle, Math.random());
+        addWidget(TestToggle, Math.random());
+        addWidget(TestToggle, Math.random());
+        addWidget(TestToggle, Math.random());
 
-        _game.addWidget(Pitch).value = 0.5;
-        _game.addWidget(PitchChange).value = 0.5;
+        addWidget(Yaw, 0.5);
+        addWidget(YawChange, 0.5);
 
-        _game.addWidget(AirSpeed).value = 0.9;
+        addWidget(Pitch, 0.5);
+        addWidget(PitchChange, 0.5);
+
+        addWidget(AirSpeed, 0.9);
+        addWidget(Throttle, 0.5);
+        addWidget(AirBrakes, 0.0);
+
+        addWidget(EngineEnabled, 1.0);
+        addWidget(EngineEnabled, 1.0);
+        addWidget(EngineEnabled, 1.0);
+        addWidget(EngineEnabled, 1.0);
+
+        addWidget(Fire, 0.0);
+        addWidget(Fire, 0.0);
+        addWidget(Fire, 0.0);
+        addWidget(Fire, 0.0);
+
+        addWidget(FireExtinguisher, 0.0);
+        addWidget(FireExtinguisher, 0.0);
+        addWidget(FireExtinguisher, 0.0);
+        addWidget(FireExtinguisher, 0.0);
+
+        addWidget(Fuel, 1.0);
+        addWidget(Fuel, 1.0);
+        addWidget(Fuel, 1.0);
+        addWidget(Fuel, 1.0);
+
+        addWidget(FuelDump, 0.0);
+        addWidget(FuelDump, 0.0);
+        addWidget(FuelDump, 0.0);
+        addWidget(FuelDump, 0.0);
+
+        addWidget(Oil, 1.0);
+        addWidget(Hydro, 1.0);
+        addWidget(AutoPilot, 1.0);
 
         _cockpit = cockpit;
         _cockpit.messaged.connect(onCockpitMessage);
@@ -132,13 +165,20 @@ class Match
 
     private function get (type :WidgetType) :WidgetData
     {
-        for (widget in _game.widgets) {
-            if (widget.type == type) {
-                return widget;
-            }
+        var all = _widgetMap.get(type);
+        return (all == null) ? null : all[0];
+    }
+
+    private function addWidget (type :WidgetType, init :Float) :Void
+    {
+        var widget = _game.addWidget(type);
+        widget.value = init;
+        var data = _widgetMap.get(type);
+        if (data == null) {
+            data = new Array();
+            _widgetMap.set(type, data);
         }
-        Assert.fail();
-        return null;
+        data.push(widget);
     }
 
     private var _game :GameData;
@@ -146,6 +186,8 @@ class Match
     private var _phones :Array<Channel>;
 
     private var _elapsed :Float = 0;
+
+    private var _widgetMap :Map<WidgetType, Array<WidgetData>>;
 
     // Collection of stateful server-only variables.
     private var _yawChange :Float = 0.5;
