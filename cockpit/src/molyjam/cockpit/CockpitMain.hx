@@ -49,7 +49,7 @@ class CockpitMain
         for (widget in ctx.game._.widgets) {
             var display = createDisplay(widget);
             var s = display.get(Sprite);
-            s.setXY(0, y);
+            s.setXY(widget.type == TestToggle ? 100 : 0, y);
             screen.addChild(display);
             y += 60;
 

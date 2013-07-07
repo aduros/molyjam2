@@ -9,10 +9,10 @@ class Match
     {
         _game = new GameData();
         _game.addWidget(Altitude).value = 1.0;
-        _game.addWidget(TestToggle);
-        _game.addWidget(TestToggle);
-        _game.addWidget(TestToggle);
-        _game.addWidget(TestToggle);
+        _game.addWidget(TestToggle).value = Math.random();
+        _game.addWidget(TestToggle).value = Math.random();
+        _game.addWidget(TestToggle).value = Math.random();
+        _game.addWidget(TestToggle).value = Math.random();
         _game.addWidget(Pitch).value = 0.1;
         _game.addWidget(Yaw).value = 0.9;
         _game.addWidget(AirSpeed).value = 0.9;
@@ -26,11 +26,18 @@ class Match
 
     public function update (dt :Float)
     {
-        // for (widget in _game.widgets) {
-        // }
+        var wellness = 0;
+        for (widget in _game.widgets) {
+            if (widget.type == TestToggle && widget.value > 0) {
+                ++wellness;
+                widget.value -= 0.5*dt;
+            }
+        }
+
+        var lift = -0.05 + 0.02*wellness;
 
         var altitude = get(Altitude);
-        altitude.value = Math.max(0, altitude.value-0.005);
+        altitude.value += dt*lift;
 
         // Update the client
         _cockpit.send("snapshot", _game.createSnapshot());

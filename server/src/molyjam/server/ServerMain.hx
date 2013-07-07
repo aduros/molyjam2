@@ -44,7 +44,7 @@ class ServerMain
             lastUpdate = now;
 
             for (match in matches) {
-                match.update(dt);
+                match.update(dt/1000);
             }
         }, 100);
     }
