@@ -9,9 +9,10 @@ import flambe.scene.Director;
 import flambe.scene.SlideTransition;
 import flambe.util.Assert;
 import flambe.util.Signal0;
-import flambe.util.Signal1;
+import flambe.util.Signal2;
 import flambe.util.Value;
 import flambe.Entity;
+import flambe.math.Point;
 
 import molyjam.Channel;
 import molyjam.Config;
@@ -25,14 +26,39 @@ class PhoneContext
     // The height of the bottom tray that holds the home button
     public static inline var TRAY_HEIGHT = 50;
 
+    public static var APPS = [
+        new AppData("Facebork", "TODO", [
+            new Point(100, 100),
+            new Point(200, 200),
+            new Point(200, 100),
+            new Point(100, 200),
+            new Point(150, 150),
+        ]),
+        new AppData("Tweetr", "TODO", [
+            new Point(100, 100),
+            new Point(200, 200),
+            new Point(200, 100),
+            new Point(100, 200),
+            new Point(150, 150),
+        ]),
+        new AppData("Facebork", "TODO", [
+            new Point(100, 100),
+            new Point(200, 200),
+            new Point(200, 100),
+            new Point(100, 200),
+            new Point(150, 150),
+        ]),
+    ];
+
     public var pack (default, null) :AssetPack;
     public var font (default, null) :Font;
 
     // Scene management
     public var director (default, null) :Director;
 
-    public var hotspots :Map<Int,Bool>;
-    public var hotspotAdded :Signal1<Int>;
+    // App index to # of active hotspots
+    public var hotspots :Array<Int>;
+    public var hotspotAdded :Signal2<Int,Int>;
 
     public var homeButton :Signal0;
 
@@ -63,8 +89,7 @@ class PhoneContext
         });
         tray.addChild(new Entity().add(button));
 
-        hotspots = new Map();
-        hotspotAdded = new Signal1();
+        hotspotAdded = new Signal2();
 
         _server.messaged.connect(onMessage);
         _server.closed.connect(function () {
@@ -80,8 +105,11 @@ class PhoneContext
         director.unwindToScene(HomeScene.create(), new SlideTransition(0.3));
     }
 
-    public function poke ()
+    public function onClickHotspot (appIdx :Int)
     {
+        var app = PhoneContext.APPS[appIdx];
+        --hotspots[appIdx];
+        hotspotAdded.emit(appIdx, -1);
         _server.send("poke");
     }
 

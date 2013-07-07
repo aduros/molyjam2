@@ -14,38 +14,51 @@ class HomeScene
         scene.addChild(new Entity()
             .add(new FillSprite(0x000000, System.stage.width, System.stage.height)));
 
+        var buttons = [];
+
         var buttonSize = 57;
         var padX = 30;
         var padY = 50;
         var offsetX = System.stage.width/2 - (3*(buttonSize+padX)-padX)/2;
         var offsetY = 10;
-        for (y in 0...3) {
-            for (x in 0...3) {
-                var button = new Entity().add(new Sprite()
-                    .setXY(offsetX + x * (buttonSize+padX) + buttonSize/2,
-                           offsetY + y * (buttonSize+padY) + buttonSize/2));
-                scene.addChild(button);
+        for (ii in 0...PhoneContext.APPS.length) {
+            var app = PhoneContext.APPS[ii];
+            var x = ii % 3;
+            var y = Std.int(ii / 3);
 
-                var icon = new FillSprite(0x009900, buttonSize, buttonSize);
-                icon.setAnchor(icon.getNaturalWidth()/2, 0);
-                icon.pointerDown.connect(function (_) {
-                    trace("Pushed button " + (3*y+x));
-                    ctx.director.pushScene(AppScene.create(), new LaunchTransition(0.5, Ease.quadOut));
-                    // button.setXY(
-                    //     Math.random()*(System.stage.width-button.getNaturalWidth()),
-                    //     Math.random()*(System.stage.height-button.getNaturalHeight()));
-                    // ctx.poke();
-                });
-                button.addChild(new Entity().add(icon));
+            var button = new Entity().add(new Sprite()
+                .setXY(offsetX + x * (buttonSize+padX) + buttonSize/2,
+                       offsetY + y * (buttonSize+padY) + buttonSize/2));
+            buttons.push(button);
+            scene.addChild(button);
 
-                var label = new TextSprite(ctx.font, "App " + (3*y+x));
-                label.setAnchor(label.getNaturalWidth()/2, 0);
-                label.setXY(0, buttonSize + 5);
-                button.addChild(new Entity().add(label));
-            }
+            var icon = new FillSprite(0x009900, buttonSize, buttonSize);
+            icon.setAnchor(icon.getNaturalWidth()/2, 0);
+            icon.pointerDown.connect(function (_) {
+                trace("Pushed button " + (3*y+x));
+                ctx.director.pushScene(AppScene.create(ii), new LaunchTransition(0.3, Ease.quadOut));
+            });
+            button.addChild(new Entity().add(icon));
+
+            var label = new TextSprite(ctx.font, app.name);
+            label.setAnchor(label.getNaturalWidth()/2, 0);
+            label.setXY(0, buttonSize + 5);
+            button.addChild(new Entity().add(label));
+
+            var badge = new TextSprite(ctx.font);
+            badge.align = Right;
+            badge.setXY(buttonSize/2, 0);
+            ctx.hotspotAdded.connect(function (appIdx, delta) {
+                if (appIdx == ii) {
+                    var active = ctx.hotspots[appIdx];
+                    badge.text = (active > 0) ? "(" + active + ")" : "";
+                }
+            });
+            button.addChild(new Entity().add(badge));
         }
 
-        ctx.hotspots = new Map();
+        ctx.hotspots = [];
+        for (app in PhoneContext.APPS) ctx.hotspots.push(0);
         System.root.add(new PhoneUpdater()); // Hackity hack
 
         return scene;
@@ -61,13 +74,13 @@ private class PhoneUpdater extends Component
         var ctx = PhoneContext.instance;
 
         _elapsed += dt;
-        while (_elapsed > 1) {
-            _elapsed -= 1;
+        while (_elapsed > 3) {
+            _elapsed -= 2*Math.random() + 0.5;
 
-            var hotspot = Std.int(Math.random()*100);
-            if (!ctx.hotspots.exists(hotspot)) {
-                ctx.hotspots.set(hotspot, true);
-                ctx.hotspotAdded.emit(hotspot);
+            var appIdx = Std.int(Math.random()*PhoneContext.APPS.length);
+            if (ctx.hotspots[appIdx] < PhoneContext.APPS[appIdx].hotspots.length) {
+                ++ctx.hotspots[appIdx];
+                ctx.hotspotAdded.emit(appIdx, 1);
                 trace("Plink");
             }
         }
