@@ -1,5 +1,7 @@
 package molyjam.cockpit;
 
+import js.Browser;
+
 import flambe.asset.AssetPack;
 import flambe.util.Assert;
 import flambe.util.Value;
@@ -30,6 +32,7 @@ class CockpitContext
         _server.messaged.connect(onMessage);
         _server.closed.connect(function () {
             trace("Oh noes, you are disconnected!");
+            Browser.window.location.reload();
         });
         // FIXME(bruno): Generate the name serverside
         _server.send("cockpit_login", Std.int(Math.random()*1000));

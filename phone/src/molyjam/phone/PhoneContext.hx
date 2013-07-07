@@ -1,5 +1,7 @@
 package molyjam.phone;
 
+import js.Browser;
+
 import flambe.System;
 import flambe.asset.AssetPack;
 import flambe.display.Font;
@@ -37,6 +39,7 @@ class PhoneContext
         _server.messaged.connect(onMessage);
         _server.closed.connect(function () {
             trace("Oh noes, you are disconnected!");
+            Browser.window.location.reload();
         });
         _server.send("phone_login");
     }
