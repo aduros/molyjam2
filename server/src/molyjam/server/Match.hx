@@ -6,13 +6,14 @@ import flambe.math.FMath.*;
 /** A single hosted game. */
 class Match
 {
-    public var name (default, null) :String;
+    public var id (default, null) :Int;
 
-    public function new (name :String, cockpit :Channel)
+    public function new (id :Int, cockpit :Channel)
     {
-        this.name = name;
+        this.id = id;
 
-        _game = new GameData();
+        _game = new GameData(generateName());
+
         _widgetMap = new Map();
 
         addWidget(Altitude, 1.0);
@@ -133,9 +134,13 @@ class Match
         _cockpit.send("snapshot", _game.createSnapshot());
     }
 
-    public function population () :Int
+    public function toSummary () :Dynamic
     {
-        return 1 + _phones.length;
+        return {
+            name: _game.name,
+            id: id,
+            population: 1 + _phones.length,
+        };
     }
 
     private function onCockpitMessage (event :String, data :Dynamic)
@@ -179,6 +184,12 @@ class Match
             _widgetMap.set(type, data);
         }
         data.push(widget);
+    }
+
+    private static function generateName ()
+    {
+        function digit () return Std.int(Math.random()*10);
+        return "Flight " + digit() + digit() + digit();
     }
 
     private var _game :GameData;

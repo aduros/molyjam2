@@ -34,8 +34,7 @@ class CockpitContext
             trace("Oh noes, you are disconnected!");
             Browser.window.location.reload();
         });
-        // FIXME(bruno): Generate the name serverside
-        _server.send("cockpit_login", Std.int(Math.random()*1000));
+        _server.send("cockpit_login");
     }
 
     public function sendToggle (data :WidgetData)

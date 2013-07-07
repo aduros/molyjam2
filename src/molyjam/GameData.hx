@@ -3,10 +3,12 @@ package molyjam;
 /** Streamed to clients. */
 class GameData
 {
+    public var name (default, null) :String;
     public var widgets (default, null) :Array<WidgetData>;
 
-    public function new ()
+    public function new (name :String)
     {
+        this.name = name;
         widgets = [];
     }
 

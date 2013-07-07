@@ -44,9 +44,9 @@ class PhoneContext
         _server.send("phone_login");
     }
 
-    public function join (name :String)
+    public function join (id :Int)
     {
-        _server.send("join", name);
+        _server.send("join", id);
         director.unwindToScene(PlayingScene.create());
     }
 

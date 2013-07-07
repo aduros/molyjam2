@@ -26,7 +26,7 @@ class MatchesScene
             var background = new FillSprite(0x202020, System.stage.width-2*pad, buttonHeight);
             background.setXY(pad, y);
             background.pointerDown.connect(function (_) {
-                ctx.join(match.name);
+                ctx.join(match.id);
             }).once();
 
             var button = new Entity().add(background);
@@ -36,8 +36,7 @@ class MatchesScene
                     background.getNaturalHeight() - 2*buttonBorder)
                     .setXY(buttonBorder, buttonBorder)));
 
-            var label = new TextSprite(ctx.font,
-                "Flight " + match.name + ", " + match.population + " aboard");
+            var label = new TextSprite(ctx.font, match.name + ", " + match.population + " aboard");
             label.setXY(pad, buttonHeight/2 - label.font.size/2);
             button.addChild(new Entity().add(label));
 

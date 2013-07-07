@@ -23,7 +23,7 @@ class ServerMain
         }]);
         trace("Listening on "+host+":"+Config.SERVER_PORT);
 
-        var matches = new Map<String,Match>();
+        var matches = new Map<Int,Match>();
         wsServer.on("connect", function (socket) {
             trace("Client connected from " + socket.remoteAddress);
 
@@ -31,33 +31,25 @@ class ServerMain
             channel.messaged.connect(function (event, data) {
                 switch (event) {
                 case "cockpit_login":
-                    var name :String = cast data;
-                    var match = new Match(name, channel);
-                    if (matches.get(name) == null) {
-                        matches.set(name, match);
-                        channel.closed.connect(function () {
-                            matches.remove(name);
-                        });
-                    } else {
-                        trace("Tried to register with an already active game name: " + name);
-                    }
+                    var match = new Match(_matchId++, channel);
+                    matches.set(match.id, match);
+                    channel.closed.connect(function () {
+                        matches.remove(match.id);
+                    });
                 case "phone_login":
                     // Tell them the active matches
                     var summary = [];
                     for (match in matches) {
-                        summary.push({
-                            name: match.name,
-                            population: match.population(),
-                        });
+                        summary.push(match.toSummary());
                     }
                     channel.send("matches", summary);
                 case "join":
-                    var name :String = cast data;
-                    var match = matches.get(name);
+                    var id :Int = cast data;
+                    var match = matches.get(id);
                     if (match != null) {
                         match.addPhone(channel);
                     } else {
-                        trace("Tried to join an invalid game name: " + name);
+                        trace("Tried to join an invalid game id: " + id);
                     }
 
                 };
@@ -75,4 +67,6 @@ class ServerMain
             }
         }, 100);
     }
+
+    private static var _matchId :Int = 0;
 }
