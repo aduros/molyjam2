@@ -14,9 +14,6 @@ class HomeScene
         scene.addChild(new Entity()
             .add(new FillSprite(0x000000, System.stage.width, System.stage.height)));
 
-        scene.addChild(new Entity()
-            .add(new TextSprite(ctx.font, "Home screen")));
-
         var buttonSize = 57;
         var padX = 30;
         var padY = 50;
@@ -49,7 +46,7 @@ class HomeScene
         }
 
         ctx.hotspots = new Map();
-        scene.add(new PhoneUpdater());
+        System.root.add(new PhoneUpdater()); // Hackity hack
 
         return scene;
     }
@@ -61,5 +58,20 @@ private class PhoneUpdater extends Component
 
     override public function onUpdate (dt :Float)
     {
+        var ctx = PhoneContext.instance;
+
+        _elapsed += dt;
+        while (_elapsed > 1) {
+            _elapsed -= 1;
+
+            var hotspot = Std.int(Math.random()*100);
+            if (!ctx.hotspots.exists(hotspot)) {
+                ctx.hotspots.set(hotspot, true);
+                ctx.hotspotAdded.emit(hotspot);
+                trace("Plink");
+            }
+        }
     }
+
+    private var _elapsed = 0.0;
 }
