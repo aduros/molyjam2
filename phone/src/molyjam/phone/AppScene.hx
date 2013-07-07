@@ -54,9 +54,9 @@ class AppScene
         }
 
         var disposer = new Disposer();
-        disposer.connect0(ctx.homeButton, function () {
+        disposer.add(ctx.homeButton.connect(function () {
             ctx.director.popScene(new CloseTransition(0.3, Ease.quadOut));
-        });
+        }).once());
         disposer.connect2(ctx.hotspotAdded, function (idx, delta) {
             if (idx == appIdx && delta > 0) {
                 // Add new hotspots as they come in
