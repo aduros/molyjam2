@@ -6,7 +6,9 @@ enum WidgetType
     TestToggle;
 
     Pitch;
+    PitchChange;
     Yaw;
+    YawChange;
     AirSpeed;
     Fuel;
     Oil;

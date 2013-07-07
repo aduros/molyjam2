@@ -16,6 +16,8 @@ class Match
         _game.addWidget(Pitch).value = 0.1;
         _game.addWidget(Yaw).value = 0.9;
         _game.addWidget(AirSpeed).value = 0.9;
+        _game.addWidget(PitchChange).value = 0.5;
+        _game.addWidget(YawChange).value = 0.5;
 
         _cockpit = cockpit;
         _cockpit.messaged.connect(onCockpitMessage);
