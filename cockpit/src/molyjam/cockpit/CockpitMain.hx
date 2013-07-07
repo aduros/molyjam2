@@ -43,8 +43,10 @@ class CockpitMain
         var screen = new Entity();
         System.root.addChild(screen);
 
-        var frame = new ImageSprite(ctx.pack.getTexture("cockpit"));
-        screen.addChild(new Entity().add(frame));
+        var left = new ImageSprite(ctx.pack.getTexture("cockpit-half"));
+        screen.addChild(new Entity().add(left));
+        var right = new ImageSprite(left.texture).setScaleXY(-1, 1).setXY(2*left.texture.width, 0);
+        screen.addChild(new Entity().add(right));
 
         var pdata :WidgetData = null;
         var ydata :WidgetData = null;
