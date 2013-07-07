@@ -7,9 +7,9 @@ class Match
     {
         _game = new GameData();
         _game.addWidget(Altitude).value = 0.7;
-        _game.addWidget(Altitude).value = 0.1;
-        _game.addWidget(Altitude).value = 0.9;
-        _game.addWidget(Altitude).value = 0.9;
+        _game.addWidget(Pitch).value = 0.1;
+        _game.addWidget(Yaw).value = 0.9;
+        _game.addWidget(AirSpeed).value = 0.9;
 
         _cockpit = cockpit;
         _cockpit.messaged.connect(onCockpitMessage);

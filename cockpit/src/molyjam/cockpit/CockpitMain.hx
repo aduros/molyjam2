@@ -46,12 +46,9 @@ class CockpitMain
         var sky = new FillSprite(0xb9deec, System.stage.width, System.stage.height);
         screen.addChild(new Entity().add(sky));
         var earth = new FillSprite(0x684e3c, System.stage.width * 2, System.stage.height * 2).setAnchor(System.stage.width / 2, 0);
-        var pdata = new WidgetData(WidgetType.Pitch);
-        var ydata = new WidgetData(WidgetType.Yaw);
-        ctx.game._.widgets.push(pdata);
-        ctx.game._.widgets.push(ydata);        
-        screen.addChild(new Entity().add(earth).add(new BackgroundDisplay(pdata, ydata)));
 
+        var pdata :WidgetData = null;
+        var ydata :WidgetData = null;
         var y = 0;
         for (widget in ctx.game._.widgets) {
             var display = createDisplay(widget);
@@ -59,7 +56,21 @@ class CockpitMain
             s.setXY(0, y);
             screen.addChild(display);
             y += 60;
+
+            trace("widget: " + widget);
+            
+            switch(widget.type) {
+                case Pitch:
+                    pdata = widget;
+                    break;
+                case Yaw:
+                    ydata = widget;
+                    break;
+                default:
+            }
         }
+        trace("pdata: " + pdata + "ydata: " + ydata);
+        screen.addChild(new Entity().add(earth).add(new BackgroundDisplay(pdata, ydata)));
     }
 
     private static function createDisplay (data :WidgetData) :Entity
