@@ -121,7 +121,7 @@ class Match
         var toiletFlushBuffer = 5.0;
         var toiletFaultBuffer = 30.0;
         var toiletFaultLength = 5.0;
-        var maxThrustFuelDrainRate = 0.005;
+        var maxThrustFuelDrainRate = 0.001;
         var maxFlapsDrag = 1.0;
         var toiletFaultDrag = 5.0;
         var airBrakesDrag = 1.0;
