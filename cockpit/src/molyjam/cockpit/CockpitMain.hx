@@ -75,6 +75,7 @@ class CockpitMain
                     screen.addChild(display);
                     s.setAnchor(s.getNaturalWidth() / 2, s.getNaturalHeight() / 2);
                     s.setXY(System.stage.width / 2 + 300, System.stage.height - 20);
+                case ToiletFlush:
                 default:
                     var display = createDisplay(widget);
                     var s = display.get(Sprite);
@@ -143,7 +144,11 @@ class CockpitMain
         case FuelDump|EngineEnabled|FireExtinguisher|AutoPilot|AirBrakes:
             return new Entity()
                 .add(new ImageSprite(CockpitContext.instance.pack.getTexture("switch-on")))
-                .add(new ButtonDisplay(data));
+                .add(new ButtonDisplay(data, true));
+        case ToiletFault:
+            return new Entity()
+                .add(new ImageSprite(CockpitContext.instance.pack.getTexture("switch-on")))
+                .add(new ButtonDisplay(data, false));            
         case Altitude:
             return new Entity()
                 .add(new FillSprite(0xff0000, 50, 50))
