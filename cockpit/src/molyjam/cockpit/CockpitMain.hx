@@ -81,6 +81,9 @@ class CockpitMain
                     pchange = widget;
                 case YawChange:
                     ychange = widget;
+                case Throttle:
+                    s.setAnchor(s.getNaturalWidth() / 2, s.getNaturalHeight() / 2);
+                    s.setXY(System.stage.width / 2 + 300, System.stage.height - 20);
                 default:
             }
         }
@@ -135,6 +138,10 @@ class CockpitMain
             return new Entity()
                 .add(new FillSprite(0xff0000, 50, 50))
                 .add(new AltitudeDisplay(data));
+        case Throttle:
+            return new Entity()
+                .add(new ImageSprite(CockpitContext.instance.pack.getTexture("throttle")))
+                .add(new ThrottleDisplay(data));
         // case Fuel:
         //     return new Entity()
         //         .add(new ImageSprite(null))

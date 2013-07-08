@@ -71,6 +71,11 @@ class CockpitContext
         _server.send("updatePitchChange", newChange);
     }
 
+    public function updateThrottle (newChange :Float)
+    {
+        _server.send("updateThrottle", newChange);
+    }
+
     private function onMessage (event :String, data :Dynamic)
     {
         switch (event) {

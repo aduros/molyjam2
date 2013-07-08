@@ -257,6 +257,8 @@ class Match
             get(YawChange).value = cast data;
         case "updatePitchChange":
             get(PitchChange).value = cast data;
+        case "updateThrottle":
+            get(Throttle).value = cast data;
         }
     }
 
