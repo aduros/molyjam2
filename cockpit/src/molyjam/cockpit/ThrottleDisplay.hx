@@ -38,7 +38,7 @@ class ThrottleDisplay extends Component
     {
         var sprite = owner.get(Sprite);
         // Locked between 1.1 and 0.9
-        sprite.setScale((_throttle.value - 0.5) * 0.2 + 1.0);
+        sprite.setScale((0.5 - _throttle.value) * 0.2 + 1.0);
 
         var throttleDiff = 0.05;
         var newThrottle = _throttle.value;

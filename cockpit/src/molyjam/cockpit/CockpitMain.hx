@@ -134,6 +134,10 @@ class CockpitMain
             return new Entity()
                 .add(new FillSprite(0xff0000, 50, 50))
                 .add(new TestDisplay(data));
+        case FuelDump|EngineEnabled|FireExtinguisher|AutoPilot|AirBrakes:
+            return new Entity()
+                .add(new ImageSprite(CockpitContext.instance.pack.getTexture("switch-on")))
+                .add(new ButtonDisplay(data));
         case Altitude:
             return new Entity()
                 .add(new FillSprite(0xff0000, 50, 50))

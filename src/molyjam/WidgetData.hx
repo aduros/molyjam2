@@ -17,7 +17,7 @@ class WidgetData
     // Useful for display/gameplay purposes?
     public function getSegment (count :Int) :Int
     {
-        return Math.round(value * count);
+        return FMath.clamp(Math.round(value * count), 0, count - 1);
     }
 
     private function set_value (value :Float) :Float

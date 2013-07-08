@@ -35,7 +35,7 @@ class Match
         addWidget(PitchChange, 0.5);
 
         addWidget(AirSpeed, 0.9);
-        addWidget(Throttle, 0.25);
+        addWidget(Throttle, 0.5);
         addWidget(AirBrakes, 0.0);
 
         addWidget(EngineEnabled, 1.0);
@@ -43,15 +43,15 @@ class Match
         addWidget(EngineEnabled, 1.0);
         addWidget(EngineEnabled, 1.0);
 
-        addWidget(Fire, 0.0);
-        addWidget(Fire, 0.0);
-        addWidget(Fire, 0.0);
-        addWidget(Fire, 0.0);
+        //addWidget(Fire, 0.0);
+        //addWidget(Fire, 0.0);
+        //addWidget(Fire, 0.0);
+        //addWidget(Fire, 0.0);
 
-        addWidget(FireExtinguisher, 0.0);
-        addWidget(FireExtinguisher, 0.0);
-        addWidget(FireExtinguisher, 0.0);
-        addWidget(FireExtinguisher, 0.0);
+        //addWidget(FireExtinguisher, 0.0);
+        //addWidget(FireExtinguisher, 0.0);
+        //addWidget(FireExtinguisher, 0.0);
+        //addWidget(FireExtinguisher, 0.0);
 
         addWidget(Fuel, 1.0);
         addWidget(Fuel, 1.0);
@@ -63,21 +63,21 @@ class Match
         addWidget(FuelDump, 0.0);
         addWidget(FuelDump, 0.0);
 
-        addWidget(Oil, 1.0);
-        addWidget(OilDesired, 1.0);
-        addWidget(Hydro, 1.0);
-        addWidget(HydroDesired, 1.0);
+        //addWidget(Oil, 1.0);
+        //addWidget(OilDesired, 1.0);
+        //addWidget(Hydro, 1.0);
+        //addWidget(HydroDesired, 1.0);
         addWidget(Flaps, 1.0);
         addWidget(FlapsDesired, 1.0);
 
-        addWidget(AutoPilot, 1.0);
-        addWidget(CallFlightAttendant, 1.0);
-        addWidget(ToiletFault, 1.0);
+        //addWidget(AutoPilot, 1.0);
+        //addWidget(CallFlightAttendant, 1.0);
+        addWidget(ToiletFault, 0.0);
 
-        addWidget(ToiletFlush, 1.0);
-        addWidget(ToiletFlush, 1.0);
-        addWidget(ToiletFlush, 1.0);
-        addWidget(ToiletFlush, 1.0);
+        addWidget(ToiletFlush, 0.0);
+        addWidget(ToiletFlush, 0.0);
+        addWidget(ToiletFlush, 0.0);
+        addWidget(ToiletFlush, 0.0);
 
         _cockpit = cockpit;
         _cockpit.messaged.connect(onCockpitMessage);
@@ -120,8 +120,8 @@ class Match
     {
         var toiletFlushBuffer = 5.0;
         var toiletFaultBuffer = 30.0;
-        var toiletFaultLength = 10.0;
-        var maxThrustFuelDrainRate = 0.01;
+        var toiletFaultLength = 5.0;
+        var maxThrustFuelDrainRate = 0.005;
         var maxFlapsDrag = 1.0;
         var toiletFaultDrag = 5.0;
         var airBrakesDrag = 1.0;
@@ -152,14 +152,15 @@ class Match
             get(ToiletFault).value = 1;
         }
 
+
         var dumpList = _widgetMap.get(FuelDump);
         var fuelList = _widgetMap.get(Fuel);
         var hasFuel :Bool = false;
         for (i in 0...dumpList.length) {
             if (dumpList[i].getSegment(2) == 1) {
-                fuelList[i].value -= maxThrustFuelDrainRate * 5;
+                fuelList[i].value -= maxThrustFuelDrainRate * 10;
             }
-        }        
+        }
 
         var thrust :Float = 0;
         var throttle = get(Throttle).value;
@@ -167,7 +168,7 @@ class Match
         for (i in 0...enginesEnabled.length) {
             if (fuelList[i].value > 0) {
                 thrust += enginesEnabled[i].getSegment(2) * throttle;
-                fuelList[i].value -= maxThrustFuelDrainRate * throttle;
+                fuelList[i].value -= enginesEnabled[i].getSegment(2) * maxThrustFuelDrainRate * throttle;
                 if (fuelList[i].value == 0) {
                     enginesEnabled[i].value = 0;
                 }
@@ -203,9 +204,6 @@ class Match
         }
         var altitude = get(Altitude);
         altitude.value += dt*lift;
-
-        trace ("air speed: " + get(AirSpeed).value + " lift: " + lift + " alt: " + altitude.value);
-        trace ("Fuel: " + fuelList[0].value + " " + fuelList[1].value + " " + fuelList[2].value + " " + fuelList[3].value);
 
         // var yawChange = (wellness-0.5) * 0.01 + (get(YawChange).value-0.5);
         // get(Yaw).value += dt*yawChange;
