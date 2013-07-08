@@ -56,22 +56,10 @@ class CockpitMain
         var ydata :WidgetData = null;
         var pchange :WidgetData = null;
         var ychange :WidgetData = null;
-        var x = 192;
-        var y = 432;
+        var x = 288;
+        var y = 336;
         var ii = 0;
         for (widget in ctx.game._.widgets) {
-            var display = createDisplay(widget);
-            var s = display.get(Sprite);
-            s.setXY(x, y);
-            screen.addChild(display);
-            x += 96;
-
-            ++ii;
-            if (ii == 7) {
-                x = 48;
-                y = 576;
-            }
-
             switch(widget.type) {
                 case Pitch:
                     pdata = widget;
@@ -82,9 +70,27 @@ class CockpitMain
                 case YawChange:
                     ychange = widget;
                 case Throttle:
+                    var display = createDisplay(widget);
+                    var s = display.get(Sprite);
+                    screen.addChild(display);
                     s.setAnchor(s.getNaturalWidth() / 2, s.getNaturalHeight() / 2);
                     s.setXY(System.stage.width / 2 + 300, System.stage.height - 20);
                 default:
+                    var display = createDisplay(widget);
+                    var s = display.get(Sprite);
+                    screen.addChild(display);            
+                    s.setXY(x, y);
+                    x += 96;
+
+                    ++ii;
+                    if (ii == 5) {
+                        x = 192;
+                        y = 432;
+                    }
+                    if (ii == 12) {
+                        x = 48;
+                        y = 576;
+                    }
             }
         }
 

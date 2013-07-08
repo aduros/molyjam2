@@ -265,8 +265,15 @@ class Match
         trace("Got event from phone: " + event + ", " + data);
         switch (event) {
         case "poke":
-            // Not what we want, but illustrative for now
-            get(Pitch).value = Math.random();
+            var widget = _game.widgets[Std.int(Math.random() * _game.widgets.length)];
+
+            switch(widget.type) {
+                case Altitude|Pitch|Yaw|AirSpeed|Fuel|Direction|Fire|ToiletFault:
+                case PitchChange|YawChange|Throttle:
+                    widget.value = Math.random();
+                default:
+                    widget.value = clamp(Math.round(Math.random() * 2), 0, 1);
+            }
         }
     }
 
