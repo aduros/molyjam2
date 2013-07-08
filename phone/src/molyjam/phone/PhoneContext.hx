@@ -127,7 +127,7 @@ class PhoneContext
     private function new (pack :AssetPack, server :Channel)
     {
         this.pack = pack;
-        font = new Font(pack, "tinyfont");
+        font = new Font(pack, "segoe28-white");
         _server = server;
         homeButton = new Signal0();
 
