@@ -16,6 +16,12 @@ class Match
 
         _widgetMap = new Map();
 
+        _toiletFlushTimestamps = new Array();
+        _toiletFlushTimestamps.push(0.0);
+        _toiletFlushTimestamps.push(0.0);
+        _toiletFlushTimestamps.push(0.0);
+        _toiletFlushTimestamps.push(0.0);
+
         addWidget(Altitude, 1.0);
         // addWidget(TestToggle, Math.random());
         // addWidget(TestToggle, Math.random());
@@ -29,7 +35,7 @@ class Match
         addWidget(PitchChange, 0.5);
 
         addWidget(AirSpeed, 0.9);
-        addWidget(Throttle, 0.5);
+        addWidget(Throttle, 0.25);
         addWidget(AirBrakes, 0.0);
 
         addWidget(EngineEnabled, 1.0);
@@ -58,8 +64,20 @@ class Match
         addWidget(FuelDump, 0.0);
 
         addWidget(Oil, 1.0);
+        addWidget(OilDesired, 1.0);
         addWidget(Hydro, 1.0);
+        addWidget(HydroDesired, 1.0);
+        addWidget(Flaps, 1.0);
+        addWidget(FlapsDesired, 1.0);
+
         addWidget(AutoPilot, 1.0);
+        addWidget(CallFlightAttendant, 1.0);
+        addWidget(ToiletFault, 1.0);
+
+        addWidget(ToiletFlush, 1.0);
+        addWidget(ToiletFlush, 1.0);
+        addWidget(ToiletFlush, 1.0);
+        addWidget(ToiletFlush, 1.0);
 
         _cockpit = cockpit;
         _cockpit.messaged.connect(onCockpitMessage);
@@ -100,27 +118,94 @@ class Match
 
     public function update (dt :Float) :Bool
     {
+        var toiletFlushBuffer = 5.0;
+        var toiletFaultBuffer = 30.0;
+        var toiletFaultLength = 10.0;
+        var maxThrustFuelDrainRate = 0.01;
+        var maxFlapsDrag = 1.0;
+        var toiletFaultDrag = 5.0;
+        var airBrakesDrag = 1.0;
+        var maxPitch = 45.0;
+        var airSpeedConstant = 0.05;
+        var weight = 0.05;
+        var baseLift = 0.05;
+        var baseDrag = 0.2;
+        var pitchDrag = 0.2;
+        var minAirSpeed = 0.2;
+        var fallingPitchChange = -2.0;
+
         _elapsed += dt;
 
-        var wellness = 0.0;
-        for (widget in _game.widgets) {
-            if (widget.type == TestToggle && widget.value > 0) {
-                ++wellness;
-                widget.value -= Math.random()*dt;
+        var toiletFlushList = _widgetMap.get(ToiletFlush);
+        var allToiletsFlushing :Bool = true;
+        for (i in 0...toiletFlushList.length) {
+            if (_elapsed - _toiletFlushTimestamps[i] > toiletFlushBuffer) {
+                if (toiletFlushList[i].getSegment(2) == 1) {
+                    _toiletFlushTimestamps[i] = _elapsed;
+                } else {
+                    allToiletsFlushing = false;
+                }
             }
         }
-        wellness /= 4; // normalize to [0,1]
+        if (allToiletsFlushing && (_elapsed - _toiletFaultTimestamp) > toiletFaultBuffer) {
+            _toiletFaultTimestamp = _elapsed;
+            get(ToiletFault).value = 1;
+        }
 
-        var lift = -0.05 + 0.08*wellness;
+        var dumpList = _widgetMap.get(FuelDump);
+        var fuelList = _widgetMap.get(Fuel);
+        var hasFuel :Bool = false;
+        for (i in 0...dumpList.length) {
+            if (dumpList[i].getSegment(2) == 1) {
+                fuelList[i].value -= maxThrustFuelDrainRate * 5;
+            }
+        }        
 
-        // Lift is a function of air speed, drag, and thrust.
-        // Air speed is a function of drag and thrust.
-        // Drag is a function of all the weird crap.
-        // Thrust is a function of throttle.
-        // Throttle affects fuel consumption.
+        var thrust :Float = 0;
+        var throttle = get(Throttle).value;
+        var enginesEnabled = _widgetMap.get(EngineEnabled);
+        for (i in 0...enginesEnabled.length) {
+            if (fuelList[i].value > 0) {
+                thrust += enginesEnabled[i].getSegment(2) * throttle;
+                fuelList[i].value -= maxThrustFuelDrainRate * throttle;
+                if (fuelList[i].value == 0) {
+                    enginesEnabled[i].value = 0;
+                }
+            }
+        }
 
+        var drag :Float = baseDrag;
+        var flaps = get(Flaps).value;
+        var flapsDesired = get(FlapsDesired).value;
+        if (flaps != flapsDesired) {
+            drag += Math.abs(flaps - flapsDesired) * maxFlapsDrag;
+        }
+        if (get(AirBrakes).getSegment(2) == 1) {
+            drag += airBrakesDrag;
+        }        
+        if (get(ToiletFault).getSegment(2) == 1) {
+            drag += toiletFaultDrag;
+            if (_elapsed - _toiletFaultTimestamp > toiletFaultLength) {
+                get(ToiletFault).value = 0;
+            }
+        }
+
+        var pitchVal = get(Pitch).value - 0.5;
+        if (pitchVal > 0) {
+            drag += pitchDrag * pitchVal;
+        }
+        get(AirSpeed).value += (thrust - drag) * airSpeedConstant;
+
+        var airSpeed = get(AirSpeed).value;
+        var lift = airSpeed * pitchVal;
+        if (airSpeed < minAirSpeed) {
+            lift -= (minAirSpeed - get(AirSpeed).value);
+        }
         var altitude = get(Altitude);
         altitude.value += dt*lift;
+
+        trace ("air speed: " + get(AirSpeed).value + " lift: " + lift + " alt: " + altitude.value);
+        trace ("Fuel: " + fuelList[0].value + " " + fuelList[1].value + " " + fuelList[2].value + " " + fuelList[3].value);
 
         // var yawChange = (wellness-0.5) * 0.01 + (get(YawChange).value-0.5);
         // get(Yaw).value += dt*yawChange;
@@ -142,8 +227,9 @@ class Match
                 _pitchChange = (pitchChange.value - _pitchChange) / 4 + _pitchChange;
             }
         }
-        var pitchChangeWithLift = 4*lift + (_pitchChange-0.5);
+        var pitchChangeWithLift = (airSpeed < minAirSpeed) ? (fallingPitchChange * (minAirSpeed - airSpeed)) + (_pitchChange-0.5) : (_pitchChange-0.5);
         get(Pitch).value += dt * pitchChangeWithLift;
+
 
         // Update the client
         _cockpit.send("snapshot", _game.createSnapshot());
@@ -219,4 +305,7 @@ class Match
     // Collection of stateful server-only variables.
     private var _yawChange :Float = 0.5;
     private var _pitchChange :Float = 0.5;
+
+    private var _toiletFaultTimestamp :Float = 0;
+    private var _toiletFlushTimestamps :Array<Float>;
 }
