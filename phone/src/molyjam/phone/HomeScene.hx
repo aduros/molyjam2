@@ -74,8 +74,8 @@ private class PhoneUpdater extends Component
         var ctx = PhoneContext.instance;
 
         _elapsed += dt;
-        while (_elapsed > 3) {
-            _elapsed -= 2*Math.random() + 0.5;
+        while (_elapsed > 1) {
+            _elapsed -= 0.5*Math.random() + 0.5;
 
             var appIdx = Std.int(Math.random()*PhoneContext.APPS.length);
             if (ctx.hotspots[appIdx] < PhoneContext.APPS[appIdx].hotspots.length) {

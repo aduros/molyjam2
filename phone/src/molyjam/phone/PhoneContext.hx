@@ -28,26 +28,84 @@ class PhoneContext
     public static inline var TRAY_HEIGHT = 50;
 
     public static var APPS = [
-        new AppData("Facebork", "TODO", [
-            new Point(100, 100),
-            new Point(200, 200),
-            new Point(200, 100),
-            new Point(100, 200),
-            new Point(150, 150),
+        new AppData("Facebork", "facebook", [
+            new Point(64, 87),
+            new Point(226, 91),
+            new Point(409, 84),
+            new Point(114, 879),
+            new Point(336, 879),
+            new Point(529, 879),
+            new Point(228, 568),
+            new Point(387, 490),
         ]),
-        new AppData("Tweetr", "TODO", [
-            new Point(100, 100),
-            new Point(200, 200),
-            new Point(200, 100),
-            new Point(100, 200),
-            new Point(150, 150),
+        new AppData("Tweetr", "twitter", [
+            new Point(592, 81),
+            new Point(312, 84),
+            new Point(558, 910),
+            new Point(84, 910),
+            new Point(240, 910),
+            new Point(399, 910),
         ]),
-        new AppData("Facebork", "TODO", [
-            new Point(100, 100),
-            new Point(200, 200),
-            new Point(200, 100),
-            new Point(100, 200),
-            new Point(150, 150),
+        new AppData("Google", "google", [
+            new Point(583, 384),
+            new Point(444, 628),
+            new Point(271, 741),
+            new Point(394, 741),
+            new Point(570, 921),
+        ]),
+        new AppData("Instagram", "instagram", [
+            new Point(205, 778),
+            new Point(340, 778),
+            new Point(475, 778),
+            new Point(91, 778),
+            new Point(264, 909),
+            new Point(381, 909),
+            new Point(580, 909),
+            new Point(211, 546),
+        ]),
+        new AppData("Music", "music", [
+            new Point(58, 87),
+            new Point(592, 87),
+            new Point(318, 816),
+            new Point(97, 816),
+            new Point(540, 816),
+            new Point(345, 912),
+            new Point(585, 262),
+            new Point(318, 262),
+            new Point(57, 262),
+        ]),
+        new AppData("Letterpress", "letterpress", [
+            new Point(595, 49),
+            new Point(49, 49),
+            new Point(321, 637),
+            new Point(568, 771),
+            new Point(61, 636),
+        ]),
+        new AppData("Messages", "text", [
+            new Point(30, 922),
+            new Point(573, 922),
+            new Point(106, 922),
+            new Point(565, 85),
+            new Point(99, 85),
+        ]),
+        new AppData("Phone", "dialpad", [
+            new Point(111, 730),
+            new Point(329, 760),
+            new Point(535, 760),
+            new Point(534, 201),
+            new Point(97, 350),
+            new Point(99, 470),
+            new Point(331, 602),
+        ]),
+        new AppData("Yelp", "yelp", [
+            new Point(63, 85),
+            new Point(573, 81),
+            new Point(64, 910),
+            new Point(189, 910),
+            new Point(328, 910),
+            new Point(444, 910),
+            new Point(574, 910),
+            new Point(409, 471),
         ]),
     ];
 
@@ -126,7 +184,8 @@ class PhoneContext
             var overlay = new Entity().add(new FillSprite(0xffffff, System.stage.width,
                 System.stage.height));
             overlay.addChild(new Entity().add(new ImageSprite(pack.getTexture("win"))));
-            director.unwindToScene(overlay, new FadeTransition(2));
+            overlay.get(Sprite).alpha.animate(0, 1, 2);
+            System.root.addChild(overlay);
         }
     }
 

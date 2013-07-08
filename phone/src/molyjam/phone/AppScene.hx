@@ -15,10 +15,15 @@ class AppScene
         var ctx = PhoneContext.instance;
         var app = PhoneContext.APPS[appIdx];
 
-        var scene = new Entity()
-            .add(new FillSprite(Std.int(Math.random()*0xffffff),
-                System.stage.width,
-                System.stage.height-PhoneContext.TRAY_HEIGHT));
+        var availWidth = System.stage.width;
+        var availHeight = System.stage.height-PhoneContext.TRAY_HEIGHT;
+
+        var scene = new Entity().add(new Sprite());
+
+        var bg = new ImageSprite(ctx.pack.getTexture("apps/"+app.image));
+        bg.scaleX._ = availWidth/bg.texture.width;
+        bg.scaleY._ = availHeight/bg.texture.height;
+        scene.addChild(new Entity().add(bg));
 
         var activeHotspots = [];
         for (p in app.hotspots) {
@@ -37,8 +42,9 @@ class AppScene
             activeHotspots[idx] = true;
 
             var button = new FillSprite(0xff0000, 50, 50).centerAnchor();
+            button.alpha._ = 0.5;
             var p = app.hotspots[idx];
-            button.setXY(p.x, p.y);
+            button.setXY(availWidth * p.x/bg.texture.width, availHeight * p.y/bg.texture.height);
             button.pointerDown.connect(function (_) {
                 trace("click");
                 activeHotspots[idx] = false;
