@@ -25,7 +25,7 @@ using flambe.util.Arrays;
 class PhoneContext
 {
     // The height of the bottom tray that holds the home button
-    public static inline var TRAY_HEIGHT = 50;
+    public static inline var TRAY_HEIGHT = 60;
 
     public static var APPS = [
         new AppData("Facebork", "facebook", [
@@ -141,7 +141,11 @@ class PhoneContext
                 .setXY(0, System.stage.height-TRAY_HEIGHT));
         System.root.addChild(tray);
 
-        var button = new FillSprite(0x000000, 40, 40).centerAnchor()
+        var button = new FillSprite(0xf0f0f0, 50, 50).centerAnchor()
+            .setXY(System.stage.width/2, TRAY_HEIGHT/2);
+        tray.addChild(new Entity().add(button));
+
+        var button = new FillSprite(0x000000, 48, 48).centerAnchor()
             .setXY(System.stage.width/2, TRAY_HEIGHT/2);
         button.pointerDown.connect(function (_) {
             homeButton.emit();
@@ -181,7 +185,7 @@ class PhoneContext
             director.unwindToScene(MatchesScene.create(matches));
         case "gameover":
             var score :Float = cast data;
-            var overlay = new Entity().add(new FillSprite(0xffffff, System.stage.width,
+            var overlay = new Entity().add(new FillSprite(0xf0f0f0, System.stage.width,
                 System.stage.height));
             overlay.addChild(new Entity().add(new ImageSprite(pack.getTexture("win"))));
             overlay.get(Sprite).alpha.animate(0, 1, 2);
